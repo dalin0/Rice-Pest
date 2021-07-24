@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ctgu.summer.mapper.DiseaseMapper">
+    <resultMap id="DiseaseMap" type="com.ctgu.summer.dto.DiseaseDto">
+        <id column="disease_id" property="id"/>
+        <result column="name" property="diseaseName"/>
+        <result column="explanation" property="diseaseExplanation"/>
+        <result column="click_num" property="clickNum"/>
+        <result column="disease_pic" property="picUrl"/>
+        <result column="create_time" property="createTime"/>
+        <collection property="classifyList" ofType="com.ctgu.summer.entity.Classify">
+            <id column="classify_id" property="classifyId"/>
+            <result column="classify_name" property="classifyName"/>
+            <result column="disease_id" property="diseaseId"/>
+        </collection>
+    </resultMap>
+
+    <select id="findAllDiseaseDto" resultMap="DiseaseMap">
+     SELECT disease.*,classify.`classify_name`
+        FROM classify
+        INNER JOIN disease
+        ON classify.disease_id = disease.disease_id
+    </select>
+
+    <select id="findDiseaseByPageSize" resultMap="DiseaseMap" parameterType="integer">
+        SELECT disease.*,classify.`classify_name`
+        FROM classify
+        INNER JOIN disease
+        ON classify.disease_id = disease.disease_id
+        LIMIT #{nowNum},#{pageSize}
+    </select>
+
+    <select id="findDiseaseById" resultMap="DiseaseMap">
+        SELECT disease.*,classify.`classify_name`
+        FROM classify
+        INNER JOIN disease
+        ON classify.disease_id = disease.disease_id
+        WHERE disease.disease_id = #{diseaseId}
+    </select>
+
+    <update id="clickDisease" parameterType="integer" flushCache="true" statementType="PREPARED" timeout="20">
+        UPDATE disease
+        SET click_num = #{clickNum}
+        WHERE disease.disease_id = #{diseaseId}
+    </update>
+
+    <select id="findDiseaseClickById" resultType="integer">
+        SELECT disease.click_num
+        FROM disease
+        WHERE disease.disease_id = #{diseaseId}
+    </select>
+    <select id="findDiseaseByName" resultType="String">
+        SELECT disease.explanation
+        FROM disease
+        WHERE disease.name = #{diseaseName}
+    </select>
+
+</mapper>

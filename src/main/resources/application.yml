@@ -1,0 +1,42 @@
+spring:
+  profiles:
+    active: dev
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/pest_detection?useUnicode=true&characterEncoding=UTF-8&userSSL=false&serverTimezone=GMT%2B8
+    username: root
+    password: 227239
+  main:
+    allow-bean-definition-overriding: true
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    jedis:
+      pool:
+        max-active: 8
+        max-wait: -1
+        max-idle: 500
+        min-idle: 0
+    lettuce:
+      shutdown-timeout: 0
+
+
+  security:
+    user:
+      name: admin
+      password: admin
+
+  swagger:
+    enable: true
+    title: 接口文档
+
+server:
+  port: 8088
+
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  mapper-locations: classpath:/xml/*.xml
+
+
+
